@@ -1,0 +1,33 @@
+{
+    "name":	"3kenizer"
+    , "description":	"3kenizer"
+    , "version":	"0.0.1"
+
+    , "author":	"Elmer Bulthuis <elmerbulthuis@gmail.com>"
+
+    , "repositories":	[
+        {
+            "type": "git",
+            "url": "git@github.com:elmerbulthuis/3kenizer.git"
+        }
+    ]
+
+    , "main": "lib/3kenizer.js"
+    , "scripts": {
+        "test": "expresso test/*"
+    }
+    
+    ,   "dependencies":	{
+	}
+    ,   "devDependencies":	{
+        "expresso": "*"
+        , "jamjs": "*"
+	}
+
+    , "jam": {
+        "dependencies": {
+            "events": "*"
+        }
+    }
+
+}
