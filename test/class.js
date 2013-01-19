@@ -1,7 +1,16 @@
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['instance'] = function(beforeExit, assert){
-	var tokenizer = new Tokenizer();
+module.exports['instantiate'] = function(beforeExit, assert){
+	var tokenizer = new Tokenizer;
 
-	assert.ok(tokenizer);
+};
+
+
+module.exports['instantiateError'] = function(beforeExit, assert){
+	var tokenizer = null;
+	
+	assert.throws(function(){
+		tokenizer = Tokenizer();
+	});
+
 };
