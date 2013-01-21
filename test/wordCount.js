@@ -36,7 +36,7 @@ function wordCountTest(file, expect){
 
 		function readStream_end(){
 			readStream.destroy();
-			tokenizer.destroySoon();
+			//tokenizer.destroySoon();
 		}//readStream_end
 
 		function tokenizer_handler(token, addNextHandler){
