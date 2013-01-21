@@ -2,8 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['countLorem'] = wordCountTest('lorem.txt', 69);
 module.exports['countOneTwoThree'] = wordCountTest('oneTwoThree.txt', 3);
+module.exports['countLorem'] = wordCountTest('lorem.txt', 69);
 module.exports['pg135'] = wordCountTest('pg135.txt', 577599);
 
 function wordCountTest(file, expect){
@@ -14,9 +14,9 @@ function wordCountTest(file, expect){
 		tokenizer.expressions = {
 			'word': /\w+/g
 			, 'whitespace': /\s+/g
-			, 'other': /./g
+			, 'other': /[^\s\w]+/g
 		}
-		tokenizer.addHandler(['word', 'whitespace', 'other'], tokenizer_handler);
+		tokenizer.addHandler(['other', 'whitespace', 'word'], tokenizer_handler);
 		tokenizer.on('token', tokenizer_token);
 
 
@@ -40,7 +40,7 @@ function wordCountTest(file, expect){
 		}//readStream_end
 
 		function tokenizer_handler(token, addNextHandler){
-			addNextHandler(['word', 'whitespace', 'other'], tokenizer_handler);
+			addNextHandler(['other', 'whitespace', 'word'], tokenizer_handler);
 		}//tokenizer_handler
 
 	};
