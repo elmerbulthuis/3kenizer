@@ -15,8 +15,10 @@ function wordCountTest(file, expect){
 			'word': /\w+/g
 			, 'whitespace': /\s+/g
 			, 'other': /[^\s\w]+/g
+			, 'eof': Tokenizer.EOF
 		}
-		tokenizer.addHandler(['other', 'whitespace', 'word'], tokenizer_handler);
+		var categories = ['other', 'whitespace', 'word', 'eof'];
+		tokenizer.addHandler(categories, tokenizer_handler);
 		tokenizer.on('token', tokenizer_token);
 
 
@@ -25,6 +27,7 @@ function wordCountTest(file, expect){
 
 		beforeExit(function(){
 			assert.equal(counters.word, expect);
+			assert.equal(counters.eof, 1);
 		});
 
 		readStream.pipe(tokenizer);
@@ -40,7 +43,12 @@ function wordCountTest(file, expect){
 		}//readStream_end
 
 		function tokenizer_handler(token, addNextHandler){
-			addNextHandler(['other', 'whitespace', 'word'], tokenizer_handler);
+			if(token.category == 'eof') {
+				addNextHandler([], null);
+			}
+			else{
+				addNextHandler(categories, tokenizer_handler);
+			}
 		}//tokenizer_handler
 
 	};

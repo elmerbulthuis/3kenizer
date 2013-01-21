@@ -34,3 +34,14 @@ module.exports['re.local'] = function(beforeExit, assert){
 
 };
 
+module.exports['re instanceof'] = function(beforeExit, assert){
+	var re = /\w+/;
+	assert.ok(re instanceof RegExp);
+};
+
+
+module.exports['str instanceof'] = function(beforeExit, assert){
+	var str = "abc"
+	assert.equal(typeof str, 'string');
+};
+
