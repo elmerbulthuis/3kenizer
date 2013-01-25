@@ -2,11 +2,11 @@ var fs = require('fs');
 var path = require('path');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['countOneTwoThree'] = wordCountTest('oneTwoThree.txt', 3);
-module.exports['countLorem'] = wordCountTest('lorem.txt', 69);
-module.exports['pg135'] = wordCountTest('pg135.txt', 577599);
+module.exports['countOneTwoThree'] = test('oneTwoThree.txt', 3);
+module.exports['countLorem'] = test('lorem.txt', 69);
+module.exports['pg135'] = test('pg135.txt', 577599);
 
-function wordCountTest(file, expect){
+function test(file, expect){
 	return function(beforeExit, assert){
 		var counters = {};
 
