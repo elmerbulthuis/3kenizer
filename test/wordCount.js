@@ -33,8 +33,8 @@ function test(file, expect){
 		readStream.pipe(tokenizer);
 
 		function tokenizer_token(token){
-			if(!(token.category in counters)) counters[token.category] = 0;
-			counters[token.category]++;
+			if(!(token in counters)) counters[token] = 0;
+			counters[token]++;
 		}//tokenizer_token
 
 		function readStream_end(){
@@ -42,8 +42,9 @@ function test(file, expect){
 			//tokenizer.destroySoon();
 		}//readStream_end
 
-		function tokenizer_handler(token){
-			if(token.category == 'eof') {
+		function tokenizer_handler(match){
+			tokenizer.setToken(match.category);
+			if(match.category == 'eof') {
 				tokenizer.addHandler([], null);
 			}
 			else{
