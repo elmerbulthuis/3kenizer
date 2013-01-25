@@ -42,12 +42,12 @@ function wordCountTest(file, expect){
 			//tokenizer.destroySoon();
 		}//readStream_end
 
-		function tokenizer_handler(token, addNextHandler){
+		function tokenizer_handler(token){
 			if(token.category == 'eof') {
-				addNextHandler([], null);
+				tokenizer.addHandler([], null);
 			}
 			else{
-				addNextHandler(categories, tokenizer_handler);
+				tokenizer.addHandler(categories, tokenizer_handler);
 			}
 		}//tokenizer_handler
 
