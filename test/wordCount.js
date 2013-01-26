@@ -15,9 +15,11 @@ function test(file, expect){
 			'word': /\w+/g
 			, 'whitespace': /\s+/g
 			, 'other': /[^\s\w]+/g
+			, 'exclamation': '!'
+			, 'question': '?'
 			, 'eof': Tokenizer.EOF
 		}
-		var categories = ['other', 'whitespace', 'word', 'eof'];
+		var categories = ['question', 'exclamation', 'whitespace', 'word', 'other', 'eof'];
 		tokenizer.addHandler(categories, tokenizer_handler);
 		tokenizer.on('token', tokenizer_token);
 
@@ -26,6 +28,7 @@ function test(file, expect){
 		readStream.on('end', readStream_end);
 
 		beforeExit(function(){
+			//console.log(counters);
 			assert.equal(counters.word, expect);
 			assert.equal(counters.eof, 1);
 		});
@@ -44,10 +47,12 @@ function test(file, expect){
 
 		function tokenizer_handler(match){
 			tokenizer.addToken(match.category);
-			if(match.category == 'eof') {
+			switch(match.category){
+				case 'eof':
 				tokenizer.addHandler([], null);
-			}
-			else{
+				break;
+
+				default:
 				tokenizer.addHandler(categories, tokenizer_handler);
 			}
 		}//tokenizer_handler
