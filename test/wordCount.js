@@ -43,7 +43,7 @@ function test(file, expect){
 		}//readStream_end
 
 		function tokenizer_handler(match){
-			tokenizer.setToken(match.category);
+			tokenizer.addToken(match.category);
 			if(match.category == 'eof') {
 				tokenizer.addHandler([], null);
 			}
