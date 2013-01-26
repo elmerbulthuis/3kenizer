@@ -25,7 +25,7 @@ function test(file, expect){
 
 
 		var readStream = fs.createReadStream(path.join('res' , file), {encoding: 'utf8'});
-		readStream.on('end', readStream_end);
+		readStream.on('close', readStream_close);
 
 		beforeExit(function(){
 			//console.log(counters);
@@ -40,10 +40,10 @@ function test(file, expect){
 			counters[token]++;
 		}//tokenizer_token
 
-		function readStream_end(){
+		function readStream_close(){
 			readStream.destroy();
-			//tokenizer.destroySoon();
-		}//readStream_end
+			tokenizer.destroySoon();
+		}//readStream_close
 
 		function tokenizer_handler(match){
 			tokenizer.addToken(match.category);
