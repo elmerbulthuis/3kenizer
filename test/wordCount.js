@@ -2,10 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['countOneTwoThree'] = test('oneTwoThree.txt', 3);
-module.exports['countLorem'] = test('lorem.txt', 69);
+module.exports['oneTwoThree'] = test('oneTwoThree.txt', 3);
+module.exports['lorem'] = test('lorem.txt', 69);
 module.exports['pg135'] = test('pg135.txt', 577599);
-module.exports['html'] = test('html.html', 9);
 
 function test(file, expect){
 	return function(beforeExit, assert){
