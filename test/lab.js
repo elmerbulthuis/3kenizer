@@ -1,47 +1,52 @@
-module.exports['re.global'] = function(beforeExit, assert){
-	var re = /\w+/g;
-	var str = 'abc def ghi';
-	var match;
+var assert = require('assert');
 
-	match = re.exec(str);
-	assert.equal(match[0], 'abc');
-	
-	match = re.exec(str);
-	assert.equal(match[0], 'def');
+describe('lab', function(){
 
-	match = re.exec(str);
-	assert.equal(match[0], 'ghi');
+	it('re.global', function(){
+		var re = /\w+/g;
+		var str = 'abc def ghi';
+		var match;
 
-	re.lastIndex = 3;
-	match = re.exec(str);
-	assert.equal(match[0], 'def');
-};
+		match = re.exec(str);
+		assert.equal(match[0], 'abc');
+		
+		match = re.exec(str);
+		assert.equal(match[0], 'def');
 
-module.exports['re.local'] = function(beforeExit, assert){
-	var re = /\w+/;
-	var str = 'abc def ghi';
-	var match;
+		match = re.exec(str);
+		assert.equal(match[0], 'ghi');
 
-	match = re.exec(str);
-	assert.equal(match[0], 'abc');
-	
-	match = re.exec(str);
-	assert.equal(match[0], 'abc');
+		re.lastIndex = 3;
+		match = re.exec(str);
+		assert.equal(match[0], 'def');
+	});
 
-	re.lastIndex = 0;
-	match = re.exec(str);
-	assert.equal(match[0], 'abc');
+	it('re.local', function(){
+		var re = /\w+/;
+		var str = 'abc def ghi';
+		var match;
 
-};
+		match = re.exec(str);
+		assert.equal(match[0], 'abc');
+		
+		match = re.exec(str);
+		assert.equal(match[0], 'abc');
 
-module.exports['re instanceof'] = function(beforeExit, assert){
-	var re = /\w+/;
-	assert.ok(re instanceof RegExp);
-};
+		re.lastIndex = 0;
+		match = re.exec(str);
+		assert.equal(match[0], 'abc');
+
+	});
+
+	it('re instanceof', function(){
+		var re = /\w+/;
+		assert.ok(re instanceof RegExp);
+	});
 
 
-module.exports['str instanceof'] = function(beforeExit, assert){
-	var str = "abc"
-	assert.equal(typeof str, 'string');
-};
+	it('str instanceof', function(){
+		var str = "abc"
+		assert.equal(typeof str, 'string');
+	});
 
+});

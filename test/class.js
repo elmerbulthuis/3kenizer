@@ -1,16 +1,19 @@
+var assert = require('assert');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['instantiate'] = function(beforeExit, assert){
-	var tokenizer = new Tokenizer;
-
-};
-
-
-module.exports['instantiateError'] = function(beforeExit, assert){
-	var tokenizer = null;
+describe('class', function(){
 	
-	assert.throws(function(){
-		tokenizer = Tokenizer();
+	it('instantiate without problems', function(){
+		var tokenizer = new Tokenizer;
 	});
 
-};
+	it('instantiation requires new keyword', function(){
+		var tokenizer = null;
+		
+		assert.throws(function(){
+			tokenizer = Tokenizer();
+		});
+	});
+
+});
+

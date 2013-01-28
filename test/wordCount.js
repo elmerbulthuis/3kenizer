@@ -1,13 +1,18 @@
+var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['oneTwoThree'] = test('oneTwoThree.txt', 3);
-module.exports['lorem'] = test('lorem.txt', 69);
-module.exports['pg135'] = test('pg135.txt', 577599);
+
+describe('wordCount', function(){
+	it('oneTwoThree', test('oneTwoThree.txt', 3));
+	it('lorem', test('lorem.txt', 69));
+	it('pg135', test('pg135.txt', 577599));
+});
+
 
 function test(file, expect){
-	return function(beforeExit, assert){
+	return function(cb){
 		var counters = {};
 
 		var tokenizer = new Tokenizer();
@@ -22,16 +27,10 @@ function test(file, expect){
 		var categories = ['question', 'exclamation', 'whitespace', 'word', 'end', 'other'];
 		tokenizer.addHandler(categories, tokenizer_handler);
 		tokenizer.on('token', tokenizer_token);
-
+		tokenizer.on('close', tokenizer_close);
 
 		var readStream = fs.createReadStream(path.join('res' , file), {encoding: 'utf8'});
 		readStream.on('close', readStream_close);
-
-		beforeExit(function(){
-			//console.log(counters);
-			assert.equal(counters.word, expect);
-			assert.equal(counters.end, 1);
-		});
 
 		readStream.pipe(tokenizer);
 
@@ -45,6 +44,7 @@ function test(file, expect){
 			tokenizer.destroySoon();
 		}//readStream_close
 
+
 		function tokenizer_handler(match){
 			tokenizer.addToken(match.category);
 			switch(match.category){
@@ -56,6 +56,14 @@ function test(file, expect){
 				tokenizer.addHandler(categories, tokenizer_handler);
 			}
 		}//tokenizer_handler
+
+		function tokenizer_close(){
+			//console.log(counters);
+			assert.equal(counters.word, expect);
+			assert.equal(counters.end, 1);
+
+			cb();
+		}//tokenizer_close
 
 	};
 

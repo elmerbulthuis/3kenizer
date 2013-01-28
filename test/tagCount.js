@@ -1,46 +1,50 @@
+var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var Tokenizer = require('../lib/3kenizer').Tokenizer;
 
-module.exports['lorem'] = test('lorem.html', {
-	html: 1
-	, head: 1
-	, title: 1
-	, body: 1
-	, br: 4
-});
-module.exports['r_and_j'] = test('r_and_j.xml', {
-	PLAY: 1
-	, TITLE: 33
-	, FM: 1
-	, P: 4
-	, PERSONAE: 1
-	, PERSONA: 25
-	, PGROUP: 3
-	, GRPDESCR: 3
-	, SCNDESCR: 1
-	, PLAYSUBT: 1
-	, ACT: 5
-	, PROLOGUE: 2
-	, SPEECH: 841
-	, SPEAKER: 841
-	, LINE: 3093
-	, SCENE: 24
-	, STAGEDIR: 202
-});
-module.exports['smileys'] = test('smileys.html', {
-	html: 1
-	, head: 1
-	, title: 1
-	, body: 1
-	, img: 2
-}, {
-	src: 2
-	, alt: 2
+describe('tagCount', function(){
+	it('lorem', test('lorem.html', {
+		html: 1
+		, head: 1
+		, title: 1
+		, body: 1
+		, br: 4
+	}));
+	it('r_and_j', test('r_and_j.xml', {
+		PLAY: 1
+		, TITLE: 33
+		, FM: 1
+		, P: 4
+		, PERSONAE: 1
+		, PERSONA: 25
+		, PGROUP: 3
+		, GRPDESCR: 3
+		, SCNDESCR: 1
+		, PLAYSUBT: 1
+		, ACT: 5
+		, PROLOGUE: 2
+		, SPEECH: 841
+		, SPEAKER: 841
+		, LINE: 3093
+		, SCENE: 24
+		, STAGEDIR: 202
+	}));
+	it('smileys', test('smileys.html', {
+		html: 1
+		, head: 1
+		, title: 1
+		, body: 1
+		, img: 2
+	}, {
+		src: 2
+		, alt: 2
+	}));
 });
 
+
 function test(file, expectTags, expectAttributes){
-	return function(beforeExit, assert){
+	return function(cb){
 		var tokens = {};
 		var attributes = {};
 		var tags = {};
@@ -58,18 +62,10 @@ function test(file, expectTags, expectAttributes){
 			, 'end': Tokenizer.specialExpressions.end
 		}
 		tokenizer.on('token', tokenizer_token);
+		tokenizer.on('close', tokenizer_close);
 
 		var readStream = fs.createReadStream(path.join('res' , file), {encoding: 'utf8'});
 		readStream.on('close', readStream_close);
-
-		beforeExit(function(){
-			//console.log(tokens);
-			//console.log(tags);
-			//console.log(attributes);
-			expectTags && assert.deepEqual(tags, expectTags);
-			expectAttributes && assert.deepEqual(attributes, expectAttributes);
-			assert.equal(tokens.end, 1);
-		});
 
 	
 		parseNext();
@@ -237,6 +233,16 @@ function test(file, expectTags, expectAttributes){
 			tokenizer.destroySoon();
 		}//readStream_close
 
+		function tokenizer_close(){
+			//console.log(tokens);
+			//console.log(tags);
+			//console.log(attributes);
+			expectTags && assert.deepEqual(tags, expectTags);
+			expectAttributes && assert.deepEqual(attributes, expectAttributes);
+			assert.equal(tokens.end, 1);
+
+			cb();
+		}//tokenizer_close
 
 	};
 

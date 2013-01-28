@@ -14,13 +14,13 @@
 
     , "main": "lib/3kenizer.js"
     , "scripts": {
-        "test": "expresso test/*"
+        "test": "mocha test/* -t 30000"
     }
     
     ,   "dependencies":	{
 	}
     ,   "devDependencies":	{
-        "expresso": "*"
+        "mocha": "*"
         , "jamjs": "*"
 	}
 
