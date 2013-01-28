@@ -28,15 +28,28 @@ module.exports['r_and_j'] = test('r_and_j.xml', {
 	, SCENE: 24
 	, STAGEDIR: 202
 });
+module.exports['smileys'] = test('smileys.html', {
+	html: 1
+	, head: 1
+	, title: 1
+	, body: 1
+	, img: 2
+}, {
+	src: 2
+	, alt: 2
+});
 
-function test(file, expect){
+function test(file, expectTags, expectAttributes){
 	return function(beforeExit, assert){
 		var tokens = {};
+		var attributes = {};
 		var tags = {};
 
 		var tokenizer = new Tokenizer();
 		tokenizer.expressions = {
 			'whitespace': /\s+/g
+			, 'attributeBegin': /([A-Za-z0-9\:]+)="/g
+			, 'attributeEnd': /"/g
 			, 'tagBegin':	/<\s*([A-Za-z0-9\:]+)\s*/g
 			, 'openTagEnd': /\s*>/
 			, 'atomicTagEnd': /\s*\/>/
@@ -52,7 +65,9 @@ function test(file, expect){
 		beforeExit(function(){
 			//console.log(tokens);
 			//console.log(tags);
-			assert.deepEqual(tags, expect);
+			//console.log(attributes);
+			expectTags && assert.deepEqual(tags, expectTags);
+			expectAttributes && assert.deepEqual(attributes, expectAttributes);
 			assert.equal(tokens.end, 1);
 		});
 
@@ -99,7 +114,7 @@ function test(file, expect){
 
 		function parseOpenTag(){
 			tokenizer.addHandler(
-				['whitespace', 'openTagEnd']
+				['whitespace', 'openTagEnd', 'attributeBegin']
 				, handleOpenTag
 			);
 		}//parseOpenTag
@@ -112,6 +127,12 @@ function test(file, expect){
 				parseOpenTag();
 				break;
 
+				case 'attributeBegin':
+				tokenizer.addToken('attribute', match[1]);
+
+				parseOpenTagAttribute();
+				break;
+
 				case 'openTagEnd':
 				parseNext();
 				break;
@@ -119,9 +140,31 @@ function test(file, expect){
 		}//handleOpenTag
 
 
+		function parseOpenTagAttribute(){
+			tokenizer.addHandler(
+				['attributeEnd', 'other']
+				, handleOpenTagAttribute
+			);
+		}//parseOpenTagAttribute
+
+		function handleOpenTagAttribute(match, categories){
+			tokenizer.addToken(match.category);
+
+			switch(match.category){
+				case 'other':
+				parseOpenTagAttribute();
+				break;
+
+				case 'attributeEnd':
+				parseOpenTag();
+				break;
+			}
+		}//handleOpenTagAttribute
+
+
 		function parseAtomicTag(){
 			tokenizer.addHandler(
-				['whitespace', 'atomicTagEnd']
+				['whitespace', 'atomicTagEnd', 'attributeBegin']
 				, handleAtomicTag
 			);
 		}//parseAtomicTag
@@ -134,24 +177,58 @@ function test(file, expect){
 				parseAtomicTag();
 				break;
 
+				case 'attributeBegin':
+				tokenizer.addToken('attribute', match[1]);
+
+				parseAtomicTagAttribute();
+				break;
+
 				case 'atomicTagEnd':
 				parseNext();
 				break;
+
 			}
 		}//handleAtomicTag
 
 
+		function parseAtomicTagAttribute(){
+			tokenizer.addHandler(
+				['attributeEnd', 'other']
+				, handleAtomicTagAttribute
+			);
+		}//parseAtomicTagAttribute
+
+		function handleAtomicTagAttribute(match, categories){
+			tokenizer.addToken(match.category);
+
+			switch(match.category){
+				case 'other':
+				parseAtomicTagAttribute();
+				break;
+
+				case 'attributeEnd':
+				parseAtomicTag();
+				break;
+			}
+		}//handleAtomicTagAttribute
 
 
 
 
-		function tokenizer_token(token, tag){
+
+
+		function tokenizer_token(token, name){
 			if(!(token in tokens)) tokens[token] = 0;
 			tokens[token]++;
 
 			if(token === 'tag'){
-				if(!(tag in tags)) tags[tag] = 0;
-				tags[tag]++;
+				if(!(name in tags)) tags[name] = 0;
+				tags[name]++;
+			}
+			
+			if(token === 'attribute'){
+				if(!(name in attributes)) attributes[name] = 0;
+				attributes[name]++;
 			}
 		}//tokenizer_token
 
