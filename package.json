@@ -14,7 +14,7 @@
 
     , "main": "lib/3kenizer.js"
     , "scripts": {
-        "test": "mocha test/*"
+        "test": "mocha test/* -t 30000"
     }
     
     ,   "dependencies":	{
