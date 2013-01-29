@@ -25,7 +25,7 @@ function test(file, expect){
 			, 'end': Tokenizer.specialExpressions.end
 		}
 		var categories = ['question', 'exclamation', 'whitespace', 'word', 'end', 'other'];
-		tokenizer.addHandler(categories, tokenizer_handler);
+		tokenizer.nextHandler(categories, tokenizer_handler);
 		tokenizer.on('token', tokenizer_token);
 		tokenizer.on('close', tokenizer_close);
 
@@ -49,11 +49,11 @@ function test(file, expect){
 			tokenizer.addToken(match.category);
 			switch(match.category){
 				case 'end':
-				tokenizer.addHandler([], null);
+				tokenizer.nextHandler([], function(){});
 				break;
 
 				default:
-				tokenizer.addHandler(categories, tokenizer_handler);
+				tokenizer.nextHandler();
 			}
 		}//tokenizer_handler
 

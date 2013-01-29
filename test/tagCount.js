@@ -75,7 +75,7 @@ function test(file, expectTags, expectAttributes){
 
 
 		function parseNext(){
-			tokenizer.addHandler(
+			tokenizer.nextHandler(
 				['whitespace', 'tagBegin', 'closeTag', 'end', 'other']
 				, handleNext
 			);
@@ -86,7 +86,7 @@ function test(file, expectTags, expectAttributes){
 
 			switch(match.category){
 				case 'end':
-				tokenizer.addHandler([], null);
+				tokenizer.nextHandler([], function(){});
 				break;
 
 				case 'whitespace':
@@ -109,7 +109,7 @@ function test(file, expectTags, expectAttributes){
 
 
 		function parseOpenTag(){
-			tokenizer.addHandler(
+			tokenizer.nextHandler(
 				['whitespace', 'openTagEnd', 'attributeBegin']
 				, handleOpenTag
 			);
@@ -120,7 +120,7 @@ function test(file, expectTags, expectAttributes){
 
 			switch(match.category){
 				case 'whitespace':
-				parseOpenTag();
+				tokenizer.nextHandler();
 				break;
 
 				case 'attributeBegin':
@@ -137,7 +137,7 @@ function test(file, expectTags, expectAttributes){
 
 
 		function parseOpenTagAttribute(){
-			tokenizer.addHandler(
+			tokenizer.nextHandler(
 				['attributeEnd', 'other']
 				, handleOpenTagAttribute
 			);
@@ -148,7 +148,7 @@ function test(file, expectTags, expectAttributes){
 
 			switch(match.category){
 				case 'other':
-				parseOpenTagAttribute();
+				tokenizer.nextHandler();
 				break;
 
 				case 'attributeEnd':
@@ -159,7 +159,7 @@ function test(file, expectTags, expectAttributes){
 
 
 		function parseAtomicTag(){
-			tokenizer.addHandler(
+			tokenizer.nextHandler(
 				['whitespace', 'atomicTagEnd', 'attributeBegin']
 				, handleAtomicTag
 			);
@@ -170,7 +170,7 @@ function test(file, expectTags, expectAttributes){
 
 			switch(match.category){
 				case 'whitespace':
-				parseAtomicTag();
+				tokenizer.nextHandler();
 				break;
 
 				case 'attributeBegin':
@@ -188,7 +188,7 @@ function test(file, expectTags, expectAttributes){
 
 
 		function parseAtomicTagAttribute(){
-			tokenizer.addHandler(
+			tokenizer.nextHandler(
 				['attributeEnd', 'other']
 				, handleAtomicTagAttribute
 			);
@@ -199,7 +199,7 @@ function test(file, expectTags, expectAttributes){
 
 			switch(match.category){
 				case 'other':
-				parseAtomicTagAttribute();
+				tokenizer.nextHandler();
 				break;
 
 				case 'attributeEnd':
