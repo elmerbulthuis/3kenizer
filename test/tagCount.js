@@ -1,7 +1,7 @@
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
-var Tokenizer = require('../lib/3kenizer').Tokenizer;
+var Tokenizer = require('../.').Tokenizer;
 
 describe('tagCount', function(){
 	it('lorem', test('lorem.html', {

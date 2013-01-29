@@ -6,14 +6,14 @@
 
 	if(typeof define === 'function' && define.amd){
 		define([
-			'./Tokenizer'
+			'./lib/Tokenizer'
 		], definer);
 		return;
 	}
 
 	if(typeof module !== 'undefined' && module.exports){
 		module.exports = definer(
-			require('./Tokenizer')
+			require('./lib/Tokenizer')
 		);
 		return;
 	}

@@ -12,14 +12,14 @@
         }
     ]
 
-    , "main": "lib/3kenizer.js"
+    , "main": "index.js"
     , "scripts": {
-        "test": "mocha test/* -t 30000"
+        "test": "mocha test/* --reporter spec --timeout 30000"
     }
     
-    ,   "dependencies":	{
+    , "dependencies":	{
 	}
-    ,   "devDependencies":	{
+    , "devDependencies":	{
         "mocha": "*"
         , "jamjs": "*"
 	}

@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Tokenizer = require('../lib/3kenizer').Tokenizer;
+var Tokenizer = require('../.').Tokenizer;
 
 describe('class', function(){
 	
