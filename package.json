@@ -1,0 +1,33 @@
+{
+    "name":	"3kenizer"
+    , "description":	"3kenizer"
+    , "version":	"0.0.1"
+
+    , "author":	"Elmer Bulthuis <elmerbulthuis@gmail.com>"
+
+    , "repositories":	[
+        {
+            "type": "git",
+            "url": "git@github.com:elmerbulthuis/3kenizer.git"
+        }
+    ]
+
+    , "main": "index.js"
+    , "scripts": {
+        "test": "mocha test/* --reporter spec --timeout 30000"
+    }
+    
+    , "dependencies":	{
+	}
+    , "devDependencies":	{
+        "mocha": "*"
+        , "jamjs": "*"
+	}
+
+    , "jam": {
+        "dependencies": {
+            "events": "*"
+        }
+    }
+
+}
